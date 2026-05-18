@@ -1,0 +1,17 @@
+@if (state().open) {
+  <div class="sj-modal-backdrop" (click)="onBackdropClick($event)">
+    <div class="sj-modal" role="dialog" aria-modal="true" [attr.aria-labelledby]="'sj-modal-title'">
+      <header class="sj-modal-header">
+        <i class="bi" [class]="iconClass()" aria-hidden="true"></i>
+        <h3 id="sj-modal-title" class="sj-modal-title">{{ state().title }}</h3>
+        <button type="button" class="btn-close" aria-label="Cerrar" (click)="close()"></button>
+      </header>
+      <div class="sj-modal-body">
+        <p class="mb-0">{{ state().message }}</p>
+      </div>
+      <footer class="sj-modal-footer">
+        <button type="button" class="btn btn-primary" (click)="close()">Aceptar</button>
+      </footer>
+    </div>
+  </div>
+}

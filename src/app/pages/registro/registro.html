@@ -1,0 +1,74 @@
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6">
+    <div class="sj-card">
+      <header class="text-center mb-4">
+        <div class="sj-auth-icon">
+          <i class="bi bi-person-plus"></i>
+        </div>
+        <h1 class="h3 mt-3 mb-1">Crear cuenta</h1>
+        <p class="text-secondary small mb-0">Completá tus datos para registrarte.</p>
+      </header>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="reg-nombre" class="form-label">Nombre</label>
+            <input id="reg-nombre" type="text" class="form-control" formControlName="nombre" placeholder="Luca">
+            @if (form.controls.nombre.touched && form.controls.nombre.invalid) {
+              <div class="form-text text-danger">
+                @if (form.controls.nombre.hasError('required')) { El nombre es obligatorio. }
+                @else if (form.controls.nombre.hasError('minlength')) { Mínimo 2 caracteres. }
+              </div>
+            }
+          </div>
+          <div class="col-md-6">
+            <label for="reg-apellido" class="form-label">Apellido</label>
+            <input id="reg-apellido" type="text" class="form-control" formControlName="apellido" placeholder="Belotti">
+            @if (form.controls.apellido.touched && form.controls.apellido.invalid) {
+              <div class="form-text text-danger">
+                @if (form.controls.apellido.hasError('required')) { El apellido es obligatorio. }
+                @else if (form.controls.apellido.hasError('minlength')) { Mínimo 2 caracteres. }
+              </div>
+            }
+          </div>
+          <div class="col-md-4">
+            <label for="reg-edad" class="form-label">Edad</label>
+            <input id="reg-edad" type="number" min="13" max="120" class="form-control" formControlName="edad">
+            @if (form.controls.edad.touched && form.controls.edad.invalid) {
+              <div class="form-text text-danger">Edad entre 13 y 120.</div>
+            }
+          </div>
+          <div class="col-md-8">
+            <label for="reg-email" class="form-label">Email</label>
+            <input id="reg-email" type="email" class="form-control" formControlName="email" placeholder="tu@email.com" autocomplete="email">
+            @if (form.controls.email.touched && form.controls.email.invalid) {
+              <div class="form-text text-danger">
+                @if (form.controls.email.hasError('required')) { El email es obligatorio. }
+                @else if (form.controls.email.hasError('email')) { El email no es válido. }
+              </div>
+            }
+          </div>
+          <div class="col-12">
+            <label for="reg-password" class="form-label">Contraseña</label>
+            <input id="reg-password" type="password" class="form-control" formControlName="password" placeholder="••••••••" autocomplete="new-password">
+            @if (form.controls.password.touched && form.controls.password.invalid) {
+              <div class="form-text text-danger">
+                @if (form.controls.password.hasError('required')) { La contraseña es obligatoria. }
+                @else if (form.controls.password.hasError('minlength')) { Mínimo 6 caracteres. }
+              </div>
+            }
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-4">
+          <i class="bi bi-person-plus me-1"></i> Crear cuenta
+        </button>
+      </form>
+
+      <div class="text-center mt-3 small text-secondary">
+        ¿Ya tenés cuenta?
+        <a routerLink="/login" class="sj-link">Iniciá sesión</a>
+      </div>
+    </div>
+  </div>
+</div>

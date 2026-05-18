@@ -1,0 +1,128 @@
+<section class="sj-card mb-4">
+  <h1 class="h3 mb-1">
+    <i class="bi bi-person-circle me-2"></i> Quién soy
+  </h1>
+  <p class="text-secondary mb-0">{{ materia }} · {{ carrera }}</p>
+</section>
+
+@if (loading()) {
+  <div class="sj-card text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="text-secondary mt-3 mb-0">Cargando datos desde GitHub...</p>
+  </div>
+} @else if (error()) {
+  <div class="alert alert-danger d-flex align-items-start gap-2">
+    <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+    <div>
+      <strong>Hubo un problema</strong>
+      <div>{{ error() }}</div>
+    </div>
+  </div>
+} @else if (user(); as u) {
+  <article class="sj-profile-card sj-card">
+    <div class="row g-4 align-items-center">
+      <div class="col-12 col-md-auto text-center">
+        <img
+          [src]="u.avatar_url"
+          [alt]="'Avatar de ' + nombreCompleto"
+          class="sj-avatar"
+          width="160"
+          height="160">
+      </div>
+      <div class="col-12 col-md">
+        <h2 class="h4 mb-1">{{ nombreCompleto }}</h2>
+        <p class="text-secondary mb-2">
+          <i class="bi bi-github me-1"></i>
+          <a [href]="u.html_url" target="_blank" rel="noopener" class="sj-link">&#64;{{ u.login }}</a>
+          @if (u.name && u.name !== nombreCompleto) {
+            <span class="ms-2 small text-muted">({{ u.name }})</span>
+          }
+        </p>
+
+        @if (u.bio) {
+          <p class="mb-2">{{ u.bio }}</p>
+        }
+
+        <ul class="list-unstyled small text-secondary mb-0">
+          @if (u.location) {
+            <li><i class="bi bi-geo-alt me-1"></i> {{ u.location }}</li>
+          }
+          @if (u.company) {
+            <li><i class="bi bi-buildings me-1"></i> {{ u.company }}</li>
+          }
+          @if (u.blog) {
+            <li>
+              <i class="bi bi-link-45deg me-1"></i>
+              <a [href]="u.blog" target="_blank" rel="noopener" class="sj-link">{{ u.blog }}</a>
+            </li>
+          }
+          <li><i class="bi bi-calendar-event me-1"></i> En GitHub desde {{ u.created_at | date:'longDate' }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="row text-center g-3">
+      <div class="col-4">
+        <div class="sj-stat">
+          <div class="sj-stat-value">{{ u.public_repos }}</div>
+          <div class="sj-stat-label">Repos públicos</div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="sj-stat">
+          <div class="sj-stat-value">{{ u.followers }}</div>
+          <div class="sj-stat-label">Seguidores</div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="sj-stat">
+          <div class="sj-stat-value">{{ u.following }}</div>
+          <div class="sj-stat-label">Siguiendo</div>
+        </div>
+      </div>
+    </div>
+  </article>
+}
+
+<section class="sj-card mt-4">
+  <h2 class="h4">
+    <i class="bi bi-flag me-2 text-warning"></i> Mi juego propio: Buscaminas
+  </h2>
+  <p class="text-secondary">
+    Elegí <strong>Buscaminas</strong> como mi cuarto juego porque combina lógica deductiva,
+    gestión de información parcial y velocidad — exactamente las capacidades cognitivas
+    que la consigna del TP pide ejercitar.
+  </p>
+
+  <h3 class="h6 mt-4"><i class="bi bi-list-ol me-1"></i> Cómo se juega</h3>
+  <ol class="small">
+    <li>El tablero es una grilla de celdas. Algunas esconden minas; el resto son seguras.</li>
+    <li>Hacé click izquierdo en una celda para descubrirla.
+      <ul>
+        <li>Si toca una mina, perdés.</li>
+        <li>Si toca una celda segura, muestra cuántas minas hay en las 8 celdas vecinas.</li>
+        <li>Si esa celda tiene 0 minas vecinas, se abre en cadena el área limpia adyacente.</li>
+      </ul>
+    </li>
+    <li>Click derecho (o botón Bandera) para marcar una celda como sospechosa y evitar abrirla por error.</li>
+    <li>Ganás cuando descubriste todas las celdas que <em>no</em> son minas.</li>
+  </ol>
+
+  <h3 class="h6 mt-4"><i class="bi bi-bar-chart me-1"></i> Qué se guarda en la base de datos</h3>
+  <ul class="small mb-0">
+    <li>Usuario que jugó.</li>
+    <li>Resultado (victoria / derrota).</li>
+    <li>Tiempo de finalización en segundos.</li>
+    <li>Tamaño de tablero y cantidad de minas (dificultad).</li>
+  </ul>
+
+  <div class="alert alert-warning small mt-4 mb-0">
+    <i class="bi bi-info-circle me-1"></i>
+    La implementación completa del Buscaminas se entrega en el <strong>Sprint #4</strong>.
+    En este Sprint #1 dejamos definida la elección y las reglas.
+  </div>
+</section>
