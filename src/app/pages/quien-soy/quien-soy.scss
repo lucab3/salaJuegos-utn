@@ -1,0 +1,39 @@
+.sj-profile-card .sj-avatar {
+  border-radius: 50%;
+  border: 4px solid #fff;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, .25);
+  object-fit: cover;
+  animation: avatarIn .5s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.sj-stat {
+  background: #f1f5f9;
+  border-radius: .75rem;
+  padding: .85rem .5rem;
+  transition: transform .2s ease, background .2s ease;
+}
+
+.sj-stat:hover {
+  background: #e0e7ff;
+  transform: translateY(-2px);
+}
+
+.sj-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--sj-primary-dark);
+  line-height: 1;
+}
+
+.sj-stat-label {
+  font-size: .75rem;
+  color: var(--sj-muted);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-top: .25rem;
+}
+
+@keyframes avatarIn {
+  from { transform: scale(.8); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}

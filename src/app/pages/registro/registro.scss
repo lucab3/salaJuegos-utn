@@ -1,0 +1,16 @@
+.sj-auth-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+}
+
+.form-control:focus {
+  border-color: var(--sj-primary);
+  box-shadow: 0 0 0 .2rem rgba(99, 102, 241, .15);
+}

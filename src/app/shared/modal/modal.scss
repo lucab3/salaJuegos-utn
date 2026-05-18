@@ -1,0 +1,55 @@
+.sj-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, .55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1080;
+  animation: fadeIn .2s ease-out both;
+  padding: 1rem;
+}
+
+.sj-modal {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+  animation: popIn .25s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.sj-modal-header {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.sj-modal-header .bi {
+  font-size: 1.5rem;
+}
+
+.sj-modal-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  flex: 1;
+}
+
+.sj-modal-body {
+  padding: 1.25rem;
+  color: #334155;
+}
+
+.sj-modal-footer {
+  padding: .75rem 1.25rem 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: .5rem;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn  { from { transform: scale(.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
