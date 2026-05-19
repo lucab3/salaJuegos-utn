@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ModalService } from '../../services/modal-service';
+import { AuthService } from '../../services/auth-service';
 
 interface JuegoCard {
   nombre: string;
@@ -17,6 +18,7 @@ interface JuegoCard {
 })
 export class Home {
   private readonly modal = inject(ModalService);
+  protected readonly auth = inject(AuthService);
 
   readonly juegos: JuegoCard[] = [
     { nombre: 'Ahorcado',      descripcion: 'Adivina la palabra letra por letra.', icono: 'bi-alphabet',    sprint: 3 },
@@ -27,8 +29,13 @@ export class Home {
 
   jugarProximamente(juego: JuegoCard): void {
     this.modal.info(
-      `${juego.nombre} se libera en el Sprint #${juego.sprint}. Hoy estamos cerrando el Sprint #1 (estructura + Quién Soy + deploy).`,
+      `${juego.nombre} se libera en el Sprint #${juego.sprint}. Hoy estamos cerrando el Sprint #2 (Auth Supabase + guards + Home condicional).`,
       'Próximamente'
     );
+  }
+
+  async cerrarSesion(): Promise<void> {
+    await this.auth.signOut();
+    this.modal.info('Sesión cerrada. ¡Hasta la próxima!', 'Listo');
   }
 }
