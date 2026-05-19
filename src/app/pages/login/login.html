@@ -44,8 +44,13 @@
           }
         </div>
 
-        <button type="submit" class="btn btn-primary w-100">
-          <i class="bi bi-box-arrow-in-right me-1"></i> Ingresar
+        <button type="submit" class="btn btn-primary w-100" [disabled]="cargando()">
+          @if (cargando()) {
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Ingresando...
+          } @else {
+            <i class="bi bi-box-arrow-in-right me-1"></i> Ingresar
+          }
         </button>
       </form>
 
@@ -54,10 +59,25 @@
         <a routerLink="/registro" class="sj-link">Registrate</a>
       </div>
 
-      <div class="alert alert-info small mt-4 mb-0">
-        <i class="bi bi-info-circle me-1"></i>
-        En el <strong>Sprint #2</strong> conectamos este formulario con Supabase
-        y habilitamos los 3 botones de inicio de sesión rápido.
+      <hr class="my-4">
+
+      <div>
+        <p class="small text-secondary text-center mb-2">
+          <i class="bi bi-lightning-charge me-1"></i>
+          Inicio de sesión rápido (testing)
+        </p>
+        <div class="d-grid gap-2">
+          @for (u of testUsers; track u.email) {
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-sm"
+              [disabled]="cargando()"
+              (click)="loginRapido(u.email, u.password)">
+              <i class="bi bi-person-fill me-1"></i> {{ u.label }}
+              <small class="text-muted ms-1">({{ u.email }})</small>
+            </button>
+          }
+        </div>
       </div>
     </div>
   </div>
