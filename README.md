@@ -6,7 +6,7 @@ Trabajo Práctico #1 de la materia **Programación IV** (4° Cuatrimestre, Tecni
 - **Docente:** Lic. Ricardo Gastón Plazas
 - **GitHub:** [@lucab3](https://github.com/lucab3)
 - **Deploy (Producción):** https://sala-juegos-utn.vercel.app
-- **Deploy (Preview rama-sprint-2):** https://sala-juegos-utn-git-rama-sprint-2-luca-belotti-6656s-projects.vercel.app
+- **Deploy (Preview rama-sprint-3):** Vercel deploya un preview automático al pushear la rama.
 
 ---
 
@@ -31,10 +31,13 @@ El TP se entrega en 5 sprints semanales, cada uno en su propia rama y vía Pull 
 src/
 ├── app/
 │   ├── pages/
-│   │   ├── home/         → Bienvenida + contenido condicional según sesión
+│   │   ├── home/         → Bienvenida + contenido condicional según sesión + grid de juegos
 │   │   ├── login/        → Form reactivo + 3 botones de login rápido + Supabase Auth
 │   │   ├── registro/     → Form reactivo + alta en Supabase Auth + insert tabla usuarios
-│   │   └── quien-soy/    → Perfil del alumno (GitHub API) - protegido por authGuard
+│   │   ├── quien-soy/    → Perfil del alumno (GitHub API) - protegido por authGuard
+│   │   ├── ahorcado/     → Juego Ahorcado con botones (sin teclado físico)
+│   │   ├── mayor-menor/  → Juego Mayor o Menor con baraja española
+│   │   └── chat/         → Chat global en tiempo real (Supabase Realtime)
 │   ├── shared/
 │   │   ├── navbar/       → Barra de navegación con UI condicional según sesión
 │   │   └── modal/        → Modal genérico (reemplazo de alert())
@@ -42,7 +45,9 @@ src/
 │   │   ├── github-service.ts       → Fetch a api.github.com/users/:username
 │   │   ├── modal-service.ts        → Estado del modal global
 │   │   ├── supabase-client.ts      → Cliente Supabase singleton
-│   │   └── auth-service.ts         → Login, registro, logout, sesión actual
+│   │   ├── auth-service.ts         → Login, registro, logout, sesión actual
+│   │   ├── partidas-service.ts     → Guardar partida + leer ranking por juego
+│   │   └── chat-service.ts         → Mensajes globales + suscripción Realtime
 │   ├── guards/
 │   │   └── auth-guard.ts           → authGuard + guestGuard (CanActivateFn)
 │   ├── app.ts            → Shell raíz
@@ -85,7 +90,8 @@ npm run build      # genera dist/salaJuegos-utn/browser/
 4. En **Authentication → Providers → Email**:
    - Activar **Email** como método de login.
    - Desactivar **Confirm email** (durante el TP, así los usuarios entran al toque sin verificar inbox).
-5. En **SQL Editor**, pegar y correr [supabase/schema.sql](supabase/schema.sql) para crear la tabla `usuarios` con Row Level Security.
+5. En **SQL Editor**, pegar y correr [supabase/schema.sql](supabase/schema.sql) para crear las tablas `usuarios`, `partidas` y `mensajes_chat` con Row Level Security (idempotente: se puede correr varias veces).
+   - El script también agrega la tabla `mensajes_chat` a la publicación `supabase_realtime` para que el chat funcione en tiempo real.
 6. Crear los 3 usuarios de testing en **Authentication → Users → Add user** con los emails y passwords definidos en `environment.ts` (`tester1@salajuegos.test`, etc.), y luego registrarlos por el formulario de la app para que se carguen en la tabla `usuarios`.
 
 ## Sprints
@@ -122,15 +128,31 @@ Rama: `rama-sprint-2`
 - **Navbar condicional**: oculta Login/Registro cuando hay sesión, muestra nombre del usuario + botón logout.
 - Esquema SQL versionado en [supabase/schema.sql](supabase/schema.sql) con Row Level Security.
 
-### Sprint #3 + #4 - Entrega 2026-05-26
+### Sprint #3 - Entrega 2026-05-26
 
-Ramas: `rama-sprint-3` y `rama-sprint-4`
+Rama: `rama-sprint-3`
 
-- **Ahorcado** (entrada por botones, no teclado).
-- **Mayor o Menor** (baraja de naipes).
-- **Chat global en tiempo real** (Supabase Realtime).
-- **Preguntados** (preguntas desde API externa).
-- **Buscaminas** (juego propio).
+- **Ahorcado** funcional con teclado en pantalla (botones A-Z). No usa el teclado físico, como pide la consigna.
+  - Palabra aleatoria desde un diccionario interno; 6 fallos máximos.
+  - Dibujo del muñeco SVG animado parte por parte.
+  - Guarda el resultado en `partidas` (puntaje según fallos restantes).
+- **Mayor o Menor** funcional con baraja española (40 cartas: oros, copas, espadas, bastos × 1-7, 10, 11, 12).
+  - Mazo barajado en cada partida; pierde con 3 errores.
+  - Animaciones de pop/flip al revelar carta siguiente.
+  - Guarda aciertos como puntaje en `partidas`.
+- **Chat global en tiempo real** vía Supabase Realtime (no requiere recargar).
+  - Tabla `mensajes_chat` con RLS + publication `supabase_realtime`.
+  - Burbujas a derecha para mensajes propios, izquierda para los demás.
+  - Auto-scroll al recibir mensajes nuevos.
+- **Persistencia en DB**: nuevas tablas `partidas` y `mensajes_chat` con Row Level Security (`partidas_insert_self`, `mensajes_insert_self`).
+- Acumula todo lo de Sprint #1 y Sprint #2 (auth, guards, home condicional, navbar condicional).
+
+### Sprint #4 - Entrega 2026-05-26
+
+Rama: `rama-sprint-4` (se entrega junto con Sprint #3)
+
+- **Preguntados** con preguntas desde API externa.
+- **Buscaminas** como juego propio.
 - 4 tablas de resultados ordenadas por desempeño.
 
 ### Sprint #5 - Recuperatorio 2026-06-02

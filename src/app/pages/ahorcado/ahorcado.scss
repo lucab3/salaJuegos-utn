@@ -1,0 +1,66 @@
+.ahorcado-wrap {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.sj-card {
+  border: 1px solid var(--sj-border, rgba(0, 0, 0, 0.08));
+  border-radius: 0.75rem;
+}
+
+.horca-svg svg {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  color: var(--bs-emphasis-color, #222);
+}
+
+.sj-fadein {
+  animation: sj-fade 0.35s ease both;
+}
+
+@keyframes sj-fade {
+  from { opacity: 0; transform: scale(0.85); transform-origin: center; }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.palabra {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+
+  .letra {
+    display: inline-block;
+    min-width: 1.6em;
+    padding: 0.25rem 0.4rem;
+    font-family: 'Courier New', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--bs-primary, #0d6efd);
+    border-bottom: 3px solid currentColor;
+    line-height: 1.2;
+    transition: color 0.2s ease;
+
+    &.vacia {
+      color: rgba(13, 110, 253, 0.35);
+    }
+  }
+}
+
+.teclado {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(2.5rem, 1fr));
+  gap: 0.4rem;
+
+  .sj-letra {
+    font-weight: 700;
+    min-height: 2.5rem;
+    transition: transform 0.15s ease;
+
+    &:not(:disabled):hover {
+      transform: translateY(-1px);
+    }
+  }
+}

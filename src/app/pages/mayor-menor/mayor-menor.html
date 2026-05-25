@@ -1,0 +1,119 @@
+<section class="mm-wrap">
+  <header class="text-center mb-4">
+    <h1 class="display-6 fw-bold"><i class="bi bi-suit-spade me-2"></i>Mayor o Menor</h1>
+    <p class="text-secondary">
+      Baraja espanola (40 cartas). Adivina si la proxima carta sera mayor, menor o igual.
+      Pierdes con {{ maxFallos }} errores.
+    </p>
+  </header>
+
+  <div class="row g-3 align-items-stretch mb-3">
+    <div class="col-6 col-md-3">
+      <div class="card sj-stat h-100"><div class="card-body text-center">
+        <div class="text-muted small">Aciertos</div>
+        <div class="display-6 fw-bold text-success">{{ aciertos() }}</div>
+      </div></div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card sj-stat h-100"><div class="card-body text-center">
+        <div class="text-muted small">Errores</div>
+        <div class="display-6 fw-bold text-danger">{{ errores() }} / {{ maxFallos }}</div>
+      </div></div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card sj-stat h-100"><div class="card-body text-center">
+        <div class="text-muted small">Cartas restantes</div>
+        <div class="display-6 fw-bold">{{ cartasRestantes() }}</div>
+      </div></div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card sj-stat h-100"><div class="card-body text-center">
+        <div class="text-muted small">Estado</div>
+        <div class="h5 mb-0 mt-2">
+          @if (estado() === 'jugando') { <span class="badge text-bg-primary">Jugando</span> }
+          @else { <span class="badge text-bg-secondary">Terminado</span> }
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="row g-3 cartas-row align-items-center justify-content-center">
+    <div class="col-12 col-md-5 text-center">
+      <div class="mm-card-label mb-1">Carta actual</div>
+      @if (cartaActual(); as c) {
+        <article class="mm-card sj-card-pop">
+          <div class="mm-corner top-left {{ coloresPalo(c.palo) }}">
+            <span class="mm-num">{{ nombreValor(c) }}</span>
+            <i class="bi {{ iconoPalo(c.palo) }}"></i>
+          </div>
+          <div class="mm-center {{ coloresPalo(c.palo) }}">
+            <i class="bi {{ iconoPalo(c.palo) }}"></i>
+          </div>
+          <div class="mm-corner bottom-right {{ coloresPalo(c.palo) }}">
+            <span class="mm-num">{{ nombreValor(c) }}</span>
+            <i class="bi {{ iconoPalo(c.palo) }}"></i>
+          </div>
+        </article>
+      }
+    </div>
+
+    <div class="col-12 col-md-5 text-center">
+      <div class="mm-card-label mb-1">Siguiente carta</div>
+      @if (mostrarSiguiente() && cartaSiguiente(); as c) {
+        <article class="mm-card sj-card-flip">
+          <div class="mm-corner top-left {{ coloresPalo(c.palo) }}">
+            <span class="mm-num">{{ nombreValor(c) }}</span>
+            <i class="bi {{ iconoPalo(c.palo) }}"></i>
+          </div>
+          <div class="mm-center {{ coloresPalo(c.palo) }}">
+            <i class="bi {{ iconoPalo(c.palo) }}"></i>
+          </div>
+          <div class="mm-corner bottom-right {{ coloresPalo(c.palo) }}">
+            <span class="mm-num">{{ nombreValor(c) }}</span>
+            <i class="bi {{ iconoPalo(c.palo) }}"></i>
+          </div>
+        </article>
+      } @else {
+        <article class="mm-card mm-card-reverso">
+          <i class="bi bi-question-lg"></i>
+        </article>
+      }
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <div class="btn-group" role="group" aria-label="Apostar">
+      <button type="button" class="btn btn-lg btn-success"
+              [disabled]="estado() !== 'jugando' || mostrarSiguiente()"
+              (click)="apostar('mayor')">
+        <i class="bi bi-arrow-up me-1"></i> Mayor
+      </button>
+      <button type="button" class="btn btn-lg btn-warning"
+              [disabled]="estado() !== 'jugando' || mostrarSiguiente()"
+              (click)="apostar('igual')">
+        <i class="bi bi-equals me-1"></i> Igual
+      </button>
+      <button type="button" class="btn btn-lg btn-danger"
+              [disabled]="estado() !== 'jugando' || mostrarSiguiente()"
+              (click)="apostar('menor')">
+        <i class="bi bi-arrow-down me-1"></i> Menor
+      </button>
+    </div>
+  </div>
+
+  @if (estado() === 'terminado') {
+    <div class="alert alert-info mt-4 text-center">
+      <i class="bi bi-flag-fill me-1"></i>
+      Partida terminada. Aciertos: <strong>{{ aciertos() }}</strong>. Errores: <strong>{{ errores() }}</strong>.
+    </div>
+  }
+
+  <div class="d-flex gap-2 mt-3 flex-wrap justify-content-center">
+    <button type="button" class="btn btn-primary" (click)="nuevaPartida()">
+      <i class="bi bi-arrow-counterclockwise me-1"></i> Nueva partida
+    </button>
+    <a routerLink="/home" class="btn btn-outline-secondary">
+      <i class="bi bi-house me-1"></i> Volver al home
+    </a>
+  </div>
+</section>

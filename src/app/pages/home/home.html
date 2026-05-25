@@ -5,10 +5,13 @@
     </div>
     <h1 class="display-5 fw-bold mt-3">¡Hola, {{ auth.displayName() }}!</h1>
     <p class="lead text-secondary mb-4">
-      Ya estás dentro de la sala. Elegí un juego o cerrá sesión cuando termines.
+      Ya estás dentro de la sala. Elegí un juego, charlá con la comunidad o cerrá sesión cuando termines.
     </p>
     <div class="d-flex justify-content-center gap-2 flex-wrap">
-      <a routerLink="/quien-soy" class="btn btn-primary btn-lg">
+      <a routerLink="/chat" class="btn btn-primary btn-lg">
+        <i class="bi bi-chat-dots me-1"></i> Chat global
+      </a>
+      <a routerLink="/quien-soy" class="btn btn-outline-primary btn-lg">
         <i class="bi bi-person-circle me-1"></i> Quién Soy
       </a>
       <button type="button" class="btn btn-outline-danger btn-lg" (click)="cerrarSesion()">
@@ -19,11 +22,11 @@
 } @else {
   <section class="hero text-center">
     <div class="hero-badge">
-      <i class="bi bi-controller"></i> Sprint #2
+      <i class="bi bi-controller"></i> Sprint #3
     </div>
     <h1 class="display-5 fw-bold mt-3">¡Bienvenido a la Sala de Juegos!</h1>
     <p class="lead text-secondary mb-4">
-      Una sala para medir tus capacidades cognitivas y motrices con cuatro juegos clásicos.
+      Una sala para medir tus capacidades cognitivas y motrices con cuatro juegos clásicos + chat global.
     </p>
     <div class="d-flex justify-content-center gap-2 flex-wrap">
       <a routerLink="/login" class="btn btn-primary btn-lg">
@@ -48,10 +51,18 @@
             </div>
             <h3 class="h5">{{ j.nombre }}</h3>
             <p class="text-secondary small flex-grow-1">{{ j.descripcion }}</p>
-            <button type="button" class="btn btn-outline-primary btn-sm" (click)="jugarProximamente(j)">
-              <i class="bi bi-play-fill me-1"></i> Jugar
+            <button type="button"
+                    class="btn btn-sm"
+                    [class.btn-primary]="!!j.ruta"
+                    [class.btn-outline-secondary]="!j.ruta"
+                    (click)="jugar(j)">
+              @if (j.ruta) {
+                <i class="bi bi-play-fill me-1"></i> Jugar
+              } @else {
+                <i class="bi bi-hourglass-split me-1"></i> Próximamente
+              }
             </button>
-            <small class="text-muted mt-2">Disponible en Sprint #{{ j.sprint }}</small>
+            <small class="text-muted mt-2">Sprint #{{ j.sprint }}</small>
           </div>
         </article>
       </div>
