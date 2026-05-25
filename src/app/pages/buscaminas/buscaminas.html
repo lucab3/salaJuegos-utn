@@ -1,0 +1,65 @@
+<section class="bm-wrap">
+  <header class="text-center mb-3">
+    <h1 class="display-6 fw-bold"><i class="bi bi-flag-fill me-2"></i>Buscaminas</h1>
+    <p class="text-secondary mb-2">
+      Click izquierdo para descubrir. Click derecho para poner bandera. Ganás al descubrir todas las celdas sin minas.
+    </p>
+  </header>
+
+  <div class="d-flex flex-wrap gap-2 justify-content-center align-items-center mb-3">
+    <div class="btn-group" role="group" aria-label="Dificultad">
+      @for (d of dificultades; track d) {
+        <button type="button"
+                class="btn btn-sm"
+                [class.btn-primary]="dificultad() === d"
+                [class.btn-outline-primary]="dificultad() !== d"
+                (click)="cambiarDificultad(d)">
+          {{ d }}
+        </button>
+      }
+    </div>
+
+    <div class="bm-stat"><i class="bi bi-flag-fill text-danger me-1"></i> {{ minasRestantes() }}</div>
+    <div class="bm-stat"><i class="bi bi-stopwatch me-1"></i> {{ formatTiempo() }}</div>
+
+    <button type="button" class="btn btn-sm btn-primary" (click)="nuevaPartida()">
+      <i class="bi bi-arrow-counterclockwise me-1"></i> Nueva
+    </button>
+  </div>
+
+  <div class="bm-tablero-wrap">
+    <div class="bm-tablero"
+         [style.--cols]="configActual().cols">
+      @for (fila of tablero(); track $index) {
+        @for (c of fila; track c.fila + '-' + c.col) {
+          <button type="button"
+                  class="bm-celda"
+                  [class]="claseCelda(c)"
+                  [disabled]="estado() !== 'jugando' && !c.abierta"
+                  (click)="abrir(c)"
+                  (contextmenu)="alternarBandera($event, c)">
+            {{ contenido(c) }}
+          </button>
+        }
+      }
+    </div>
+  </div>
+
+  @if (estado() === 'ganado') {
+    <div class="alert alert-success text-center mt-3">
+      <i class="bi bi-trophy-fill me-1"></i>
+      Ganaste en {{ formatTiempo() }}!
+    </div>
+  } @else if (estado() === 'perdido') {
+    <div class="alert alert-danger text-center mt-3">
+      <i class="bi bi-emoji-frown me-1"></i>
+      Boom. Pisaste una mina.
+    </div>
+  }
+
+  <div class="text-center mt-3">
+    <a routerLink="/home" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-house me-1"></i> Volver al home
+    </a>
+  </div>
+</section>

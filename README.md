@@ -37,6 +37,9 @@ src/
 │   │   ├── quien-soy/    → Perfil del alumno (GitHub API) - protegido por authGuard
 │   │   ├── ahorcado/     → Juego Ahorcado con botones (sin teclado físico)
 │   │   ├── mayor-menor/  → Juego Mayor o Menor con baraja española
+│   │   ├── preguntados/  → Trivia con API externa (opentdb.com)
+│   │   ├── buscaminas/   → Juego propio - 3 dificultades, cronómetro, banderas
+│   │   ├── resultados/   → 4 tablas de ranking por juego
 │   │   └── chat/         → Chat global en tiempo real (Supabase Realtime)
 │   ├── shared/
 │   │   ├── navbar/       → Barra de navegación con UI condicional según sesión
@@ -47,7 +50,8 @@ src/
 │   │   ├── supabase-client.ts      → Cliente Supabase singleton
 │   │   ├── auth-service.ts         → Login, registro, logout, sesión actual
 │   │   ├── partidas-service.ts     → Guardar partida + leer ranking por juego
-│   │   └── chat-service.ts         → Mensajes globales + suscripción Realtime
+│   │   ├── chat-service.ts         → Mensajes globales + suscripción Realtime
+│   │   └── trivia-service.ts       → Fetch a opentdb.com (Preguntados)
 │   ├── guards/
 │   │   └── auth-guard.ts           → authGuard + guestGuard (CanActivateFn)
 │   ├── app.ts            → Shell raíz
@@ -151,9 +155,21 @@ Rama: `rama-sprint-3`
 
 Rama: `rama-sprint-4` (se entrega junto con Sprint #3)
 
-- **Preguntados** con preguntas desde API externa.
-- **Buscaminas** como juego propio.
-- 4 tablas de resultados ordenadas por desempeño.
+- **Preguntados** funcional con preguntas desde la API externa [opentdb.com](https://opentdb.com).
+  - 10 preguntas multiple choice por partida.
+  - Puntaje según dificultad (fácil 10, media 20, difícil 30).
+  - Decoding de HTML entities (`&quot;`, `&eacute;`, etc.) que devuelve la API.
+  - Guarda el resultado en `partidas`.
+- **Buscaminas** como juego propio, con 3 dificultades (8×8/10 minas, 10×10/18 minas, 12×12/30 minas).
+  - Cronómetro en pantalla.
+  - Apertura en cascada de celdas con 0 vecinas.
+  - Banderas con click derecho.
+  - Primera click nunca es mina (las minas se colocan después del primer movimiento).
+  - Guarda resultado + dificultad + tiempo en `partidas`.
+- **4 tablas de resultados** (Ahorcado, Mayor o Menor, Preguntados, Buscaminas), ordenadas por puntaje desc y fecha desc.
+  - Podio top 3 destacado con colores (oro/plata/bronce).
+  - Detalle por juego según el campo `datos` JSONB (palabra adivinada, aciertos, dificultad, etc.).
+- Servicio nuevo: `trivia-service.ts` para consumir la API externa con `HttpClient`.
 
 ### Sprint #5 - Recuperatorio 2026-06-02
 
