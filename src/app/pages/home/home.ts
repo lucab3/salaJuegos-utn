@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ModalService } from '../../services/modal-service';
 import { AuthService } from '../../services/auth-service';
 
@@ -8,6 +8,7 @@ interface JuegoCard {
   descripcion: string;
   icono: string;
   sprint: number;
+  ruta?: string;
 }
 
 @Component({
@@ -18,18 +19,28 @@ interface JuegoCard {
 })
 export class Home {
   private readonly modal = inject(ModalService);
+  private readonly router = inject(Router);
   protected readonly auth = inject(AuthService);
 
   readonly juegos: JuegoCard[] = [
-    { nombre: 'Ahorcado',      descripcion: 'Adivina la palabra letra por letra.', icono: 'bi-alphabet',    sprint: 3 },
-    { nombre: 'Mayor o Menor', descripcion: 'Apostá si la próxima carta es mayor o menor.', icono: 'bi-suit-spade', sprint: 3 },
-    { nombre: 'Preguntados',   descripcion: 'Trivia con preguntas desde una API externa.', icono: 'bi-question-circle', sprint: 4 },
-    { nombre: 'Buscaminas',    descripcion: 'Mi juego propio. Descubrí las celdas evitando las minas.', icono: 'bi-flag', sprint: 4 }
+    { nombre: 'Ahorcado',      descripcion: 'Adivina la palabra letra por letra.',          icono: 'bi-alphabet',        sprint: 3, ruta: '/ahorcado' },
+    { nombre: 'Mayor o Menor', descripcion: 'Apostá si la próxima carta es mayor o menor.', icono: 'bi-suit-spade',      sprint: 3, ruta: '/mayor-menor' },
+    { nombre: 'Preguntados',   descripcion: 'Trivia con preguntas desde una API externa.',  icono: 'bi-question-circle', sprint: 4 },
+    { nombre: 'Buscaminas',    descripcion: 'Mi juego propio. Descubrí celdas y evitá las minas.', icono: 'bi-flag',     sprint: 4 }
   ];
 
-  jugarProximamente(juego: JuegoCard): void {
+  jugar(juego: JuegoCard): void {
+    if (!this.auth.isAuthenticated()) {
+      this.modal.warning('Tenés que iniciar sesión para jugar.', 'Acceso restringido');
+      this.router.navigateByUrl('/login');
+      return;
+    }
+    if (juego.ruta) {
+      this.router.navigateByUrl(juego.ruta);
+      return;
+    }
     this.modal.info(
-      `${juego.nombre} se libera en el Sprint #${juego.sprint}. Hoy estamos cerrando el Sprint #2 (Auth Supabase + guards + Home condicional).`,
+      `${juego.nombre} se libera en el Sprint #${juego.sprint}. Hoy estamos cerrando el Sprint #${juego.sprint - 1}.`,
       'Próximamente'
     );
   }

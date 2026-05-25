@@ -1,0 +1,87 @@
+<section class="ahorcado-wrap">
+  <header class="text-center mb-4">
+    <h1 class="display-6 fw-bold"><i class="bi bi-alphabet me-2"></i>Ahorcado</h1>
+    <p class="text-secondary">
+      Adivina la palabra letra por letra. Tenes {{ maxFallos }} fallos antes de perder.
+      <strong>Solo se juega con los botones de pantalla, no con el teclado.</strong>
+    </p>
+  </header>
+
+  <div class="row g-4">
+    <div class="col-lg-5">
+      <div class="card sj-card h-100">
+        <div class="card-body text-center">
+          <div class="horca-svg mb-3">
+            <svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <line x1="20" y1="210" x2="180" y2="210" stroke="currentColor" stroke-width="4"/>
+              <line x1="50" y1="210" x2="50" y2="20" stroke="currentColor" stroke-width="4"/>
+              <line x1="50" y1="20" x2="130" y2="20" stroke="currentColor" stroke-width="4"/>
+              <line x1="130" y1="20" x2="130" y2="40" stroke="currentColor" stroke-width="4"/>
+
+              @if (fallos() >= 1) { <circle cx="130" cy="55" r="15" stroke="currentColor" stroke-width="3" fill="none" class="sj-fadein"/> }
+              @if (fallos() >= 2) { <line x1="130" y1="70" x2="130" y2="130" stroke="currentColor" stroke-width="3" class="sj-fadein"/> }
+              @if (fallos() >= 3) { <line x1="130" y1="85" x2="105" y2="115" stroke="currentColor" stroke-width="3" class="sj-fadein"/> }
+              @if (fallos() >= 4) { <line x1="130" y1="85" x2="155" y2="115" stroke="currentColor" stroke-width="3" class="sj-fadein"/> }
+              @if (fallos() >= 5) { <line x1="130" y1="130" x2="110" y2="170" stroke="currentColor" stroke-width="3" class="sj-fadein"/> }
+              @if (fallos() >= 6) { <line x1="130" y1="130" x2="150" y2="170" stroke="currentColor" stroke-width="3" class="sj-fadein"/> }
+            </svg>
+          </div>
+          <p class="text-muted mb-0">Fallos: <strong>{{ fallos() }}</strong> / {{ maxFallos }}</p>
+          @if (letrasIncorrectas().length) {
+            <small class="text-danger">Incorrectas: {{ letrasIncorrectas().join(', ') }}</small>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-7">
+      <div class="card sj-card mb-3">
+        <div class="card-body text-center">
+          <div class="palabra mb-3">
+            @for (ch of palabraVisible(); track $index) {
+              <span class="letra" [class.vacia]="ch === '_'">{{ ch }}</span>
+            }
+          </div>
+
+          @if (estado() === 'ganado') {
+            <div class="alert alert-success mb-0">
+              <i class="bi bi-trophy-fill me-1"></i>
+              Ganaste! Adivinaste <strong>{{ palabra() }}</strong> con {{ fallos() }} fallo(s).
+            </div>
+          } @else if (estado() === 'perdido') {
+            <div class="alert alert-danger mb-0">
+              <i class="bi bi-emoji-frown me-1"></i>
+              Perdiste. La palabra era <strong>{{ palabra() }}</strong>.
+            </div>
+          } @else {
+            <small class="text-secondary">Toca una letra para probarla.</small>
+          }
+        </div>
+      </div>
+
+      <div class="teclado">
+        @for (l of letras; track l) {
+          <button
+            type="button"
+            class="btn sj-letra"
+            [class.btn-success]="esCorrecta(l)"
+            [class.btn-danger]="esIncorrecta(l)"
+            [class.btn-outline-primary]="!yaUsada(l)"
+            [disabled]="yaUsada(l) || estado() !== 'jugando'"
+            (click)="elegir(l)">
+            {{ l }}
+          </button>
+        }
+      </div>
+
+      <div class="d-flex gap-2 mt-3 flex-wrap">
+        <button type="button" class="btn btn-primary" (click)="nuevaPartida()">
+          <i class="bi bi-arrow-counterclockwise me-1"></i> Nueva partida
+        </button>
+        <a routerLink="/home" class="btn btn-outline-secondary">
+          <i class="bi bi-house me-1"></i> Volver al home
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

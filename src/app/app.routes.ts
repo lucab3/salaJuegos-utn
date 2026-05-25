@@ -31,6 +31,24 @@ export const routes: Routes = [
     title: 'Sala de Juegos | Quién Soy'
   },
   {
+    path: 'ahorcado',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/ahorcado/ahorcado').then(m => m.Ahorcado),
+    title: 'Sala de Juegos | Ahorcado'
+  },
+  {
+    path: 'mayor-menor',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/mayor-menor/mayor-menor').then(m => m.MayorMenor),
+    title: 'Sala de Juegos | Mayor o Menor'
+  },
+  {
+    path: 'chat',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/chat/chat').then(m => m.Chat),
+    title: 'Sala de Juegos | Chat'
+  },
+  {
     path: '**',
     redirectTo: 'home'
   }

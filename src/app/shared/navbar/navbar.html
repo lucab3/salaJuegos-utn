@@ -26,6 +26,11 @@
 
         @if (auth.isAuthenticated()) {
           <li class="nav-item">
+            <a class="nav-link" routerLink="/chat" routerLinkActive="active">
+              <i class="bi bi-chat-dots me-1"></i> Chat
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" routerLink="/quien-soy" routerLinkActive="active">
               <i class="bi bi-person-circle me-1"></i> Quién Soy
             </a>

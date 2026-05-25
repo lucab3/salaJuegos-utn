@@ -1,0 +1,52 @@
+<section class="chat-wrap">
+  <header class="text-center mb-3">
+    <h1 class="h3 fw-bold mb-1"><i class="bi bi-chat-dots me-2"></i>Chat global</h1>
+    <p class="text-secondary mb-0">
+      En tiempo real (Supabase Realtime). Tu mensaje aparece a la derecha; el de los demas, a la izquierda.
+    </p>
+  </header>
+
+  <div class="card chat-card mb-3">
+    <div #listaMsg class="chat-lista">
+      @if (chat.mensajes().length === 0) {
+        <div class="text-center text-secondary py-5">
+          <i class="bi bi-chat-square-dots fs-1 d-block mb-2"></i>
+          Todavia no hay mensajes. Se el primero!
+        </div>
+      } @else {
+        @for (m of chat.mensajes(); track m.id) {
+          <div class="chat-mensaje" [class.mio]="chat.esMio(m)">
+            <div class="chat-burbuja">
+              <div class="chat-autor">
+                <i class="bi bi-person-circle me-1"></i>
+                {{ nombreAutor(m.user_id, m.usuario?.nombre, m.usuario?.apellido, m.usuario?.email) }}
+              </div>
+              <div class="chat-contenido">{{ m.contenido }}</div>
+              <div class="chat-hora"><i class="bi bi-clock me-1"></i>{{ formatHora(m.enviado_en) }}</div>
+            </div>
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="enviar()" class="d-flex gap-2">
+    <input
+      type="text"
+      class="form-control form-control-lg"
+      formControlName="contenido"
+      placeholder="Escribi un mensaje..."
+      autocomplete="off"
+      maxlength="500"
+      [disabled]="enviando()" />
+    <button type="submit" class="btn btn-primary btn-lg" [disabled]="form.invalid || enviando()">
+      <i class="bi bi-send-fill me-1"></i> Enviar
+    </button>
+  </form>
+
+  <div class="text-center mt-3">
+    <a routerLink="/home" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-house me-1"></i> Volver al home
+    </a>
+  </div>
+</section>
