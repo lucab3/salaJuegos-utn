@@ -113,12 +113,23 @@ export class MayorMenor implements OnInit {
     }, 900);
   }
 
-  nombreValor(c: Carta): string {
+  etiquetaCorta(c: Carta): string {
     if (c.valor === 1) return 'AS';
+    return String(c.valor);
+  }
+
+  etiquetaLarga(c: Carta): string {
     if (c.valor === 10) return 'SOTA';
     if (c.valor === 11) return 'CABALLO';
     if (c.valor === 12) return 'REY';
-    return String(c.valor);
+    return '';
+  }
+
+  emojiFigura(c: Carta): string {
+    if (c.valor === 10) return '\u{1F935}'; // hombre con esmoquin (sota/paje)
+    if (c.valor === 11) return '\u{1F40E}'; // caballo
+    if (c.valor === 12) return '\u{1F934}'; // principe/rey
+    return '';
   }
 
   coloresPalo(palo: Palo): string {

@@ -56,6 +56,14 @@
   .mm-num {
     font-size: 1.05rem;
     color: var(--mm-corner-color, #333);
+    line-height: 1;
+  }
+
+  .mm-nombre {
+    font-size: 0.55rem;
+    letter-spacing: 0.04em;
+    color: var(--mm-corner-color, #333);
+    margin-top: 1px;
   }
 
   svg {
@@ -91,6 +99,12 @@
   padding: 2px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
   display: inline-flex;
+}
+
+.mm-figura {
+  font-size: 5.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
 }
 
 .mm-palo-oros    { --mm-corner-color: #b8860b; }
