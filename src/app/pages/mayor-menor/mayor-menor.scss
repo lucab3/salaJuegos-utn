@@ -74,9 +74,23 @@
 }
 
 .mm-center {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.mm-palo-mini {
+  position: absolute;
+  top: 12%;
+  right: 18%;
+  background: #fff;
+  border-radius: 50%;
+  padding: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+  display: inline-flex;
 }
 
 .mm-palo-oros    { --mm-corner-color: #b8860b; }
