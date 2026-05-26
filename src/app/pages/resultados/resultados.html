@@ -1,0 +1,71 @@
+<section class="res-wrap">
+  <header class="text-center mb-4">
+    <h1 class="display-6 fw-bold"><i class="bi bi-bar-chart-line me-2"></i>Resultados</h1>
+    <p class="text-secondary">
+      Top 10 de cada juego, ordenado por puntaje (mayor a menor) y luego por fecha.
+    </p>
+  </header>
+
+  <div class="row g-3">
+    @for (t of tablas(); track t.juego) {
+      <div class="col-12 col-lg-6">
+        <div class="card res-card h-100">
+          <div class="card-header d-flex align-items-center gap-2">
+            <i class="bi" [class]="t.icono"></i>
+            <h2 class="h5 mb-0">{{ t.titulo }}</h2>
+            <span class="badge text-bg-secondary ms-auto">Top {{ t.filas.length }}</span>
+          </div>
+          <div class="card-body p-0">
+            @if (t.cargando) {
+              <div class="text-center py-4">
+                <div class="spinner-border spinner-border-sm text-primary"></div>
+                <span class="ms-2 text-secondary">Cargando ranking...</span>
+              </div>
+            } @else if (t.filas.length === 0) {
+              <div class="text-center text-secondary py-4">
+                <i class="bi bi-inbox d-block fs-3 mb-1"></i>
+                Sin partidas todavía. Sé el primero!
+              </div>
+            } @else {
+              <div class="table-responsive">
+                <table class="table table-sm mb-0 res-tabla">
+                  <thead>
+                    <tr>
+                      <th scope="col" class="text-center">#</th>
+                      <th scope="col">Jugador</th>
+                      <th scope="col" class="text-end">Puntaje</th>
+                      <th scope="col">{{ t.detalleCol }}</th>
+                      <th scope="col">Fecha</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (f of t.filas; track f.id) {
+                      <tr [class.res-podio-1]="$index === 0"
+                          [class.res-podio-2]="$index === 1"
+                          [class.res-podio-3]="$index === 2">
+                        <td class="text-center fw-bold">{{ $index + 1 }}</td>
+                        <td>{{ nombreJugador(f) }}</td>
+                        <td class="text-end fw-bold">{{ f.puntaje }}</td>
+                        <td><small>{{ detalle(t.juego, f) }}</small></td>
+                        <td><small class="text-muted">{{ formatFecha(f.jugada_en) }}</small></td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="text-center mt-4">
+    <button type="button" class="btn btn-outline-primary me-2" (click)="cargarTodo()">
+      <i class="bi bi-arrow-clockwise me-1"></i> Refrescar
+    </button>
+    <a routerLink="/home" class="btn btn-outline-secondary">
+      <i class="bi bi-house me-1"></i> Volver al home
+    </a>
+  </div>
+</section>

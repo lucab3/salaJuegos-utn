@@ -1,8 +1,44 @@
+<ng-template #paloSvg let-palo="palo" let-size="size">
+  @switch (palo) {
+    @case ('oros') {
+      <svg [attr.width]="size" [attr.height]="size" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="14" fill="#f0c419" stroke="#b8860b" stroke-width="2"/>
+        <circle cx="16" cy="16" r="9" fill="none" stroke="#b8860b" stroke-width="1.5"/>
+        <text x="16" y="20" text-anchor="middle" font-size="11" font-weight="bold" fill="#7a5c00">$</text>
+      </svg>
+    }
+    @case ('copas') {
+      <svg [attr.width]="size" [attr.height]="size" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M8 4 H24 V12 Q24 20 16 20 Q8 20 8 12 Z" fill="#c0392b" stroke="#7a1d12" stroke-width="1.5"/>
+        <rect x="14" y="20" width="4" height="6" fill="#c0392b" stroke="#7a1d12" stroke-width="1.5"/>
+        <rect x="9" y="26" width="14" height="2.5" rx="1" fill="#c0392b" stroke="#7a1d12" stroke-width="1.5"/>
+      </svg>
+    }
+    @case ('espadas') {
+      <svg [attr.width]="size" [attr.height]="size" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M16 2 L13 26 L19 26 Z" fill="#3498db" stroke="#1f4e79" stroke-width="1.5"/>
+        <rect x="9" y="23" width="14" height="2.5" fill="#1f4e79"/>
+        <rect x="14" y="25.5" width="4" height="4" fill="#1f4e79"/>
+        <circle cx="16" cy="30" r="1.5" fill="#1f4e79"/>
+      </svg>
+    }
+    @case ('bastos') {
+      <svg [attr.width]="size" [attr.height]="size" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="14" y="3" width="4" height="26" rx="1.2" fill="#27ae60" stroke="#145a32" stroke-width="1.3"/>
+        <ellipse cx="16" cy="3" rx="3" ry="1.5" fill="#145a32"/>
+        <ellipse cx="16" cy="11" rx="2.6" ry="1.1" fill="#145a32" opacity="0.55"/>
+        <ellipse cx="16" cy="19" rx="2.6" ry="1.1" fill="#145a32" opacity="0.55"/>
+      </svg>
+    }
+  }
+</ng-template>
+
+
 <section class="mm-wrap">
   <header class="text-center mb-4">
     <h1 class="display-6 fw-bold"><i class="bi bi-suit-spade me-2"></i>Mayor o Menor</h1>
     <p class="text-secondary">
-      Baraja espanola (40 cartas). Adivina si la proxima carta sera mayor, menor o igual.
+      Baraja espanola (48 cartas: 1 al 12). Adivina si la proxima carta sera mayor, menor o igual.
       Pierdes con {{ maxFallos }} errores.
     </p>
   </header>
@@ -41,17 +77,26 @@
     <div class="col-12 col-md-5 text-center">
       <div class="mm-card-label mb-1">Carta actual</div>
       @if (cartaActual(); as c) {
-        <article class="mm-card sj-card-pop">
-          <div class="mm-corner top-left {{ coloresPalo(c.palo) }}">
-            <span class="mm-num">{{ nombreValor(c) }}</span>
-            <i class="bi {{ iconoPalo(c.palo) }}"></i>
+        <article class="mm-card sj-card-pop {{ coloresPalo(c.palo) }}">
+          <div class="mm-corner top-left">
+            <span class="mm-num">{{ etiquetaCorta(c) }}</span>
+            @if (etiquetaLarga(c)) { <span class="mm-nombre">{{ etiquetaLarga(c) }}</span> }
+            <ng-container *ngTemplateOutlet="paloSvg; context: { palo: c.palo, size: 18 }"></ng-container>
           </div>
-          <div class="mm-center {{ coloresPalo(c.palo) }}">
-            <i class="bi {{ iconoPalo(c.palo) }}"></i>
+          <div class="mm-center">
+            @if (c.valor >= 10) {
+              <span class="mm-figura">{{ emojiFigura(c) }}</span>
+              <span class="mm-palo-mini">
+                <ng-container *ngTemplateOutlet="paloSvg; context: { palo: c.palo, size: 28 }"></ng-container>
+              </span>
+            } @else {
+              <ng-container *ngTemplateOutlet="paloSvg; context: { palo: c.palo, size: 90 }"></ng-container>
+            }
           </div>
-          <div class="mm-corner bottom-right {{ coloresPalo(c.palo) }}">
-            <span class="mm-num">{{ nombreValor(c) }}</span>
-            <i class="bi {{ iconoPalo(c.palo) }}"></i>
+          <div class="mm-corner bottom-right">
+            <span class="mm-num">{{ etiquetaCorta(c) }}</span>
+            @if (etiquetaLarga(c)) { <span class="mm-nombre">{{ etiquetaLarga(c) }}</span> }
+            <ng-container *ngTemplateOutlet="paloSvg; context: { palo: c.palo, size: 18 }"></ng-container>
           </div>
         </article>
       }
@@ -60,17 +105,26 @@
     <div class="col-12 col-md-5 text-center">
       <div class="mm-card-label mb-1">Siguiente carta</div>
       @if (mostrarSiguiente() && cartaSiguiente(); as c) {
-        <article class="mm-card sj-card-flip">
-          <div class="mm-corner top-left {{ coloresPalo(c.palo) }}">
-            <span class="mm-num">{{ nombreValor(c) }}</span>
-            <i class="bi {{ iconoPalo(c.palo) }}"></i>
+        <article class="mm-card sj-card-flip {{ coloresPalo(c.palo) }}">
+          <div class="mm-corner top-left">
+            <span class="mm-num">{{ etiquetaCorta(c) }}</span>
+            @if (etiquetaLarga(c)) { <span class="mm-nombre">{{ etiquetaLarga(c) }}</span> }
+            <ng-container *ngTemplateOutlet="paloSvg; context: { palo: c.palo, size: 18 }"></ng-container>
           </div>
-          <div class="mm-center {{ coloresPalo(c.palo) }}">
-            <i class="bi {{ iconoPalo(c.palo) }}"></i>
+          <div class="mm-center">
+            @if (c.valor >= 10) {
+              <span class="mm-figura">{{ emojiFigura(c) }}</span>
+              <span class="mm-palo-mini">
+                <ng-container *ngTemplateOutlet="paloSvg; context: { palo: c.palo, size: 28 }"></ng-container>
+              </span>
+            } @else {
+              <ng-container *ngTemplateOutlet="paloSvg; context: { palo: c.palo, size: 90 }"></ng-container>
+            }
           </div>
-          <div class="mm-corner bottom-right {{ coloresPalo(c.palo) }}">
-            <span class="mm-num">{{ nombreValor(c) }}</span>
-            <i class="bi {{ iconoPalo(c.palo) }}"></i>
+          <div class="mm-corner bottom-right">
+            <span class="mm-num">{{ etiquetaCorta(c) }}</span>
+            @if (etiquetaLarga(c)) { <span class="mm-nombre">{{ etiquetaLarga(c) }}</span> }
+            <ng-container *ngTemplateOutlet="paloSvg; context: { palo: c.palo, size: 18 }"></ng-container>
           </div>
         </article>
       } @else {

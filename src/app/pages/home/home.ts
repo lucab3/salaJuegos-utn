@@ -25,8 +25,8 @@ export class Home {
   readonly juegos: JuegoCard[] = [
     { nombre: 'Ahorcado',      descripcion: 'Adivina la palabra letra por letra.',          icono: 'bi-alphabet',        sprint: 3, ruta: '/ahorcado' },
     { nombre: 'Mayor o Menor', descripcion: 'Apostá si la próxima carta es mayor o menor.', icono: 'bi-suit-spade',      sprint: 3, ruta: '/mayor-menor' },
-    { nombre: 'Preguntados',   descripcion: 'Trivia con preguntas desde una API externa.',  icono: 'bi-question-circle', sprint: 4 },
-    { nombre: 'Buscaminas',    descripcion: 'Mi juego propio. Descubrí celdas y evitá las minas.', icono: 'bi-flag',     sprint: 4 }
+    { nombre: 'Preguntados',   descripcion: 'Trivia con preguntas desde una API externa.',  icono: 'bi-question-circle', sprint: 4, ruta: '/preguntados' },
+    { nombre: 'Buscaminas',    descripcion: 'Mi juego propio. Descubrí celdas y evitá las minas.', icono: 'bi-flag',     sprint: 4, ruta: '/buscaminas' }
   ];
 
   jugar(juego: JuegoCard): void {

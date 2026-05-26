@@ -52,7 +52,7 @@ export class PartidasService {
   async ranking(juego: JuegoId, limite = 10): Promise<RankingFila[]> {
     const { data, error } = await this.supabase
       .from('partidas')
-      .select('id, juego, gano, puntaje, jugada_en, datos, usuarios:user_id ( nombre, apellido, email )')
+      .select('id, user_id, juego, gano, puntaje, jugada_en, datos')
       .eq('juego', juego)
       .order('puntaje', { ascending: false })
       .order('jugada_en', { ascending: false })
@@ -60,18 +60,32 @@ export class PartidasService {
 
     if (error) throw new Error('No se pudo cargar el ranking: ' + error.message);
 
-    return (data ?? []).map(r => {
-      const u = (r as any).usuarios;
-      const usuario = u ? { nombre: u.nombre, apellido: u.apellido, email: u.email } : null;
-      return {
-        id: r.id as number,
-        juego: r.juego as JuegoId,
-        gano: r.gano as boolean | null,
-        puntaje: r.puntaje as number,
-        jugada_en: r.jugada_en as string,
-        datos: (r.datos ?? {}) as Record<string, unknown>,
-        usuario
-      };
-    });
+    const filas = data ?? [];
+    const userIds = Array.from(new Set(filas.map(f => f.user_id as string)));
+
+    const perfiles = new Map<string, { nombre: string; apellido: string; email: string }>();
+    if (userIds.length > 0) {
+      const { data: usuarios } = await this.supabase
+        .from('usuarios')
+        .select('id, nombre, apellido, email')
+        .in('id', userIds);
+      for (const u of usuarios ?? []) {
+        perfiles.set(u.id as string, {
+          nombre: u.nombre as string,
+          apellido: u.apellido as string,
+          email: u.email as string
+        });
+      }
+    }
+
+    return filas.map(r => ({
+      id: r.id as number,
+      juego: r.juego as JuegoId,
+      gano: r.gano as boolean | null,
+      puntaje: r.puntaje as number,
+      jugada_en: r.jugada_en as string,
+      datos: (r.datos ?? {}) as Record<string, unknown>,
+      usuario: perfiles.get(r.user_id as string) ?? null
+    }));
   }
 }

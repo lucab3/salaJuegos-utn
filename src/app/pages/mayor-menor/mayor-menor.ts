@@ -1,15 +1,16 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ModalService } from '../../services/modal-service';
 import { PartidasService } from '../../services/partidas-service';
 
 export type Palo = 'oros' | 'copas' | 'espadas' | 'bastos';
 export interface Carta {
-  valor: number;     // 1..7, 10, 11, 12
+  valor: number;     // 1..12 (baraja espanola de 48 cartas)
   palo: Palo;
 }
 
-const VALORES = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12];
+const VALORES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const PALOS: Palo[] = ['oros', 'copas', 'espadas', 'bastos'];
 
 function armarMazo(): Carta[] {
@@ -35,7 +36,7 @@ type Resultado = 'jugando' | 'terminado';
 
 @Component({
   selector: 'app-mayor-menor',
-  imports: [RouterLink],
+  imports: [RouterLink, NgTemplateOutlet],
   templateUrl: './mayor-menor.html',
   styleUrl: './mayor-menor.scss'
 })
@@ -112,29 +113,31 @@ export class MayorMenor implements OnInit {
     }, 900);
   }
 
-  nombreValor(c: Carta): string {
+  etiquetaCorta(c: Carta): string {
     if (c.valor === 1) return 'AS';
-    if (c.valor === 10) return 'SOTA';
-    if (c.valor === 11) return 'CABALLO';
-    if (c.valor === 12) return 'REY';
     return String(c.valor);
   }
 
-  iconoPalo(palo: Palo): string {
-    switch (palo) {
-      case 'oros':    return 'bi-coin';
-      case 'copas':   return 'bi-cup-fill';
-      case 'espadas': return 'bi-lightning-charge-fill';
-      case 'bastos':  return 'bi-tree-fill';
-    }
+  etiquetaLarga(c: Carta): string {
+    if (c.valor === 10) return 'SOTA';
+    if (c.valor === 11) return 'CABALLO';
+    if (c.valor === 12) return 'REY';
+    return '';
+  }
+
+  emojiFigura(c: Carta): string {
+    if (c.valor === 10) return '\u{1F935}'; // hombre con esmoquin (sota/paje)
+    if (c.valor === 11) return '\u{1F40E}'; // caballo
+    if (c.valor === 12) return '\u{1F934}'; // principe/rey
+    return '';
   }
 
   coloresPalo(palo: Palo): string {
     switch (palo) {
-      case 'oros':    return 'text-warning';
-      case 'copas':   return 'text-danger';
-      case 'espadas': return 'text-primary';
-      case 'bastos':  return 'text-success';
+      case 'oros':    return 'mm-palo-oros';
+      case 'copas':   return 'mm-palo-copas';
+      case 'espadas': return 'mm-palo-espadas';
+      case 'bastos':  return 'mm-palo-bastos';
     }
   }
 

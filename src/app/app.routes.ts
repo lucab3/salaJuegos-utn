@@ -49,6 +49,24 @@ export const routes: Routes = [
     title: 'Sala de Juegos | Chat'
   },
   {
+    path: 'preguntados',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/preguntados/preguntados').then(m => m.Preguntados),
+    title: 'Sala de Juegos | Preguntados'
+  },
+  {
+    path: 'buscaminas',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/buscaminas/buscaminas').then(m => m.Buscaminas),
+    title: 'Sala de Juegos | Buscaminas'
+  },
+  {
+    path: 'resultados',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/resultados/resultados').then(m => m.Resultados),
+    title: 'Sala de Juegos | Resultados'
+  },
+  {
     path: '**',
     redirectTo: 'home'
   }
